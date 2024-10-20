@@ -1,0 +1,57 @@
+// IBKR Script for buying USD/EUR at 11:11 am and another share at 3:33 pm
+// Enter your account details below
+
+AccountID=YOUR_ACCOUNT_ID;
+Exchange="IDEALPRO";
+Symbol="EUR";
+Currency="USD";
+
+// First trade at 11:11 am
+StartTime = "11:11:00";
+Timezone = "America/New_York"; // Change to your timezone if different
+
+//Second trade at 3:33 pm
+SecondStartTime = "15:33:00";
+SecondTimezone = "America/New_York"; // Change to your timezone if different
+
+
+
+// Place order function
+
+function placeOrder(quantity) {
+try {
+// Get contract details
+contract = getContract(Symbol, Exchange, Currency);
+
+// Create and place order
+order = createMarketOrder("BUY", quantity);
+placeOrderAndWait(order, contract, AccountID);
+log("Order placed for " + quantity + " " + Symbol);
+} catch (ex) {
+log("Error placing order: " + ex.description);
+}
+}
+
+// Main function
+
+function run() {
+var currentDate = new Date();
+
+// First trade at 11:11 am
+var tradeTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), getLocalHour(StartTime, Timezone), parseInt(StartTime.split(":")[1]), Integer.parseInt(StartTime.split(":")[2]));
+
+if (currentDate >= tradeTime) {
+placeOrder(20000);
+}
+
+//Second trade at 3:33 pm
+var secondTradeTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), getLocalHour(SecondStartTime, SecondTimezone), parseInt(SecondStartTime.split(":")[1]), Integer.parseInt(SecondStartTime.split(":")[2]));
+
+if (currentDate >= secondTradeTime) {
+placeOrder(100);
+}
+
+exit();
+}
+
+run();
