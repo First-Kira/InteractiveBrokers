@@ -1,0 +1,37 @@
+Install the Kraken API Python module using pip in the terminal:
+pip install krakenex
+
+Import the Kraken API module and set the API key and secret in your Python script.
+import krakenex
+import time
+
+api_key = 'YOUR_API_KEY'
+api_secret = 'YOUR_API_SECRET'
+
+
+k = krakenex.API(api_key, api_secret)
+
+pair = 'ETHUSD' # pair of cryptocurrency and fiat currency you want to trade
+
+# Get the Ethereum ticker
+eth_ticker = k.query_public('Ticker',{'pair': f'{pair}'})['result']
+
+#Get the last traded price of Ethereum
+last_price = eth_ticker[pair]['c'][0]
+
+# Define the order type and amount of Ethereum
+order_type = 'buy' #order type, can be either 'buy' or 'sell'
+eth_amount = '5' #amount of Ethereum to buy
+price_limit = last_price #price limit to buy Ethereum at the current market price
+
+# Place the order
+order_resp = k.query_private('AddOrder', {'pair': f'{pair}',
+'type': f'{order_type}',
+'ordertype': 'limit',
+'price': f'{price_limit}',
+'volume': f'{eth_amount}'})
+print(order_resp)
+
+Run the Python script and it will buy 5 Ethereum at the current market price on Kraken.
+
+Note: Be cautious with your API credentials and ensure that your Kraken account has sufficient funds and meets the trading requirements. Always do thorough research and understand the risks and implications of trading cryptocurrencies.
