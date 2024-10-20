@@ -1,0 +1,23 @@
+/ Define contract details for Airbnb stock
+contract = Contract.create("AIRBNB", "STK", "SMART", "SMART", "USD")
+
+// Define order details to buy 1 share at 11:11am
+buyOrder1 = Order.create("BUY", 1, "LMT")
+buyOrder1.conditions.append(TimeCondition.create("11:11:00", "GMT"))
+buyOrder1.totalQuantity = 1
+buyOrder1.lmtPrice = 100
+buyOrder1.transmit = false
+
+// Define order details to buy 1 share at 3:33pm
+buyOrder2 = Order.create("BUY", 1, "LMT")
+buyOrder2.conditions.append(TimeCondition.create("15:33:00", "GMT"))
+buyOrder2.totalQuantity = 1
+buyOrder2.lmtPrice = 100
+buyOrder2.transmit = false
+
+// Connect to IBKR and place orders
+ibkr = IBKR.create()
+ibkr.connect()
+ibkr.placeOrder(contract, buyOrder1)
+ibkr.placeOrder(contract, buyOrder2)
+ibkr.disconnect()
